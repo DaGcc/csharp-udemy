@@ -8,6 +8,6 @@ namespace OWN_CONTROL_EXCEPTIONS.EXCEPTION_RESPONSE
 {
     internal class CustomOwnerException : Exception
     {
-        public CustomOwnerException( string Message ) : base(Message){ }   
+        public CustomOwnerException(string Message) : base(Message) { }
     }
 }

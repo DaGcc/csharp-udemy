@@ -1,4 +1,8 @@
 ﻿
+
+
+using System;
+
 /**
  * La mayoria de excepciones derivan de Sistem.Exception
  * Refs:
@@ -43,6 +47,16 @@ namespace ControlExceptions
             try
             {
                 FilterException filterException = new FilterException();
+
+                Console.WriteLine("[0: null] [1: con valor]");
+
+                Int32.TryParse(Console.ReadLine(), result: out int r);
+
+                if (r == 0)
+                {
+                    filterException.origin(null);
+                }
+
                 filterException.origin(data: "mi error de prueba filtro");
                 //filterException.FilterExceptionMethod(null);
             }
@@ -57,8 +71,8 @@ namespace ControlExceptions
             {
                 CustomException customException = new CustomException();
                 //customException.origin();   
-            }   
-            catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -111,11 +125,11 @@ namespace ControlExceptions
         {
             try
             {
-                throw new Exception($"{message??"parametro nullo"}");
+                throw new Exception($"{message ?? "parametro nullo"}");
             }
             catch (Exception e) when (message is null)// en este catch, manejamos un mensaje mas personalizado, tambien podemos crear una clase para que tengamos una excepcion especifica y darle nuestros mensajes personalizados.
             {
-                throw new Exception(e.Message + "- bloque de filtro"); // Es valido, pues estamos en el mismo trace o impl donde se lanzo la excepcion
+                throw new Exception(e.Message + " - bloque de filtro"); // Es valido, pues estamos en el mismo trace o impl donde se lanzo la excepcion
 
             }
             catch (Exception)
@@ -130,7 +144,7 @@ namespace ControlExceptions
 
     class CustomException()
     {
-           
+
     }
 
 
