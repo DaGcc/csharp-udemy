@@ -42,8 +42,6 @@ namespace ControlExceptions
 
 
 
-
-
             try
             {
                 FilterException filterException = new FilterException();
@@ -52,7 +50,7 @@ namespace ControlExceptions
 
                 Int32.TryParse(Console.ReadLine(), result: out int r);
 
-                if (r == 0)
+                if (r == 0) 
                 {
                     filterException.origin(null);
                 }
