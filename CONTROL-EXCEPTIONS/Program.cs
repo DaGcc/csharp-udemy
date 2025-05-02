@@ -41,7 +41,6 @@ namespace ControlExceptions
             }
 
 
-
             try
             {
                 FilterException filterException = new FilterException();
