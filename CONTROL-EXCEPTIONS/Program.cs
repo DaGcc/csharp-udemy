@@ -41,6 +41,7 @@ namespace ControlExceptions
             }
 
 
+            // el commit ?
             try
             {
                 FilterException filterException = new FilterException();
