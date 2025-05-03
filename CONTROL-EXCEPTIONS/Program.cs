@@ -2,6 +2,7 @@
 
 
 using System;
+using OWN_CONTROL_EXCEPTIONS.EXCEPTION_RESPONSE;
 
 /**
  * La mayoria de excepciones derivan de Sistem.Exception
@@ -36,12 +37,12 @@ namespace ControlExceptions
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.StackTrace);
                 Console.WriteLine(e.Message);
                 //*Console.WriteLine(e.StackTrace); // Trazo de donde se genero la excepcion y por donde fue cayendo, hasta llegar al final de la pila (LIFO) => DESCOMENTA PARA VER EL TRACE
             }
 
 
-            // el commit ?
             try
             {
                 FilterException filterException = new FilterException();
@@ -50,12 +51,12 @@ namespace ControlExceptions
 
                 Int32.TryParse(Console.ReadLine(), result: out int r);
 
-                if (r == 0) 
+                if (r == 0)
                 {
-                    filterException.origin(null);
+                    filterException.Origin(null);
                 }
 
-                filterException.origin(data: "mi error de prueba filtro");
+                filterException.Origin(data: "Probando el filtro exception");
                 //filterException.FilterExceptionMethod(null);
             }
             catch (Exception e)
@@ -68,11 +69,15 @@ namespace ControlExceptions
             try
             {
                 CustomException customException = new CustomException();
-                //customException.origin();   
+                customException.ExceptionA("Con valor");
+            }
+            catch (CustomOwnerException e)
+            {
+                Console.WriteLine(e.Message + " - Bloque CustomOwnerException");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e.Message + " - Bloque Exception");
             }
         }
 
@@ -113,7 +118,7 @@ namespace ControlExceptions
     class FilterException
     {
 
-        public void origin(string? data)
+        public void Origin(string? data)
         {
             FilterExceptionMethod(data);
 
@@ -143,7 +148,24 @@ namespace ControlExceptions
     class CustomException()
     {
 
+        public void ExceptionA(string? data)
+        {
+            //Console.WriteLine(data.Length); // cambialo por esto para que tede otra expceion de NullReferenceException, pero quita el "?" en el parametro
+            Console.WriteLine(data?.Length);
+
+            if (data is null) throw new CustomOwnerException("Mi data fue null");
+
+            throw new Exception("Normal Exception");
+        }
+
     }
+
+    /**
+     * Nullable refence types 
+     * null state: 
+     * - not null
+     * - maybe null
+     */
 
 
 }
