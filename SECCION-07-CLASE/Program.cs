@@ -2,7 +2,7 @@
 
 using static System.Formats.Asn1.AsnWriter;
 
-namespace Seccion7
+namespace Seccion7Clase
 {
 
     class Program
@@ -59,10 +59,13 @@ namespace Seccion7
 		 */
 
 
-        //PROPIEDADES => [] [] [] []
 
         //USO BASICO 
-        private DateOnly _date;//backing-store => lo usamos como respaldo, si es que deseamos implementar logica en los descriptores de acceso 
+
+        //CAMPO => [MODIFICADORES DE ACCESO] [TIPO DE DATO] [NombreDePropiedad]
+        private DateOnly _date; //backing-store => lo usamos como respaldo, si es que deseamos implementar logica en los descriptores de acceso 
+
+        //PROPIEDADES => [MODIFICADORES DE ACCESO] [TIPO DE DATO] [NombreDePropiedad] [DESCRIPTOR DE ACCESO]
         public DateOnly Date {
             get => _date;
             set 
