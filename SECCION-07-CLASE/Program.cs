@@ -129,4 +129,10 @@ namespace Seccion7Clase
 
     }
  
+
+
+    public class ClaseGenerica<T>
+    {
+
+    }
 }
