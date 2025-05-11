@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 // ref0: https://learn.microsoft.com/es-es/dotnet/csharp/language-reference/
 /**
@@ -104,10 +106,10 @@ namespace Seccion8ColeccionesGenericas
             //NT : una conversion puede o no perder informacion o producir una excepcion "OverFlowException", revisar "ref4"
 
             BaseDos baseDos = new BaseDos();
-            DerivadaDos derivadaDos = (DerivadaDos)baseDos;//o baseDos as DerivadaDos;. En los de tipo referencia se puede usar (T)E y 'as'[E as T: E is T ? (T)(E) : (T)null ].
+            //o baseDos as DerivadaDos;. En los de tipo referencia se puede 'as' [E as T: E is T ? (T)(E) : (T)null ].
             DerivadaDos? derivadaTres = baseDos as DerivadaDos;//'as'[E as T: E is T ? (T)(E) : (T)null ], la diferencia aqui esta en que 'as' convierte en una referencia determinada o un "tipo de valor que acepta valores NULL", por ello, debemos controlar el maybe-null con "?" en el E.
 
-            
+
 
             // Conversiones Boxing y Unboxing
             int i = 123;      // a value type
@@ -116,10 +118,10 @@ namespace Seccion8ColeccionesGenericas
 
 
 
-            // Recordemos clases genericos 
+            // Recordemos clases genericos, pues de ahora en adelante veremos esto muy seguido en colecciones genericas
             GuardaObjetosGenerico<Base> claseGenerica = new GuardaObjetosGenerico<Base>(6);
 
-            Base miBase3 = new Base() { Propiedad = 9 };
+            Base miBase3 = new() { Propiedad = 9 };
             Base miBase4 = new Base() { Propiedad = 1 };
             Base miBase1 = new Base(5);
             Base miBase2 = new Base(7);
@@ -129,8 +131,11 @@ namespace Seccion8ColeccionesGenericas
             claseGenerica.GuardarElementos(miBase1);
             claseGenerica.GuardarElementos(miBase2);
 
-            
+
             Console.WriteLine(claseGenerica.ObtenerElemento(2).ToString());
+
+
+
 
             /**NT: ANTES DE EMPEZAR, ES NECESARIO TENER CONICIMIENTO DE TIPOS INTEGRADOS 
              * 
@@ -148,18 +153,146 @@ namespace Seccion8ColeccionesGenericas
              * 
              */
 
+            //***************************************************************************************************************************************************************************************************************************
+            //********************************************************************************* DICTIONARY<TKey, TValue> ****************************************************************************************************************
+            //***************************************************************************************************************************************************************************************************************************
+            // 1.- Dictionary<TKey,TValue>
+            // (*) ref5 : https://learn.microsoft.com/es-es/dotnet/api/system.collections.dictionarybase?view=net-9.0 => IDictionaryBase
+            // (*) ref6 : https://learn.microsoft.com/es-es/dotnet/api/system.collections.generic.dictionary-2?view=net-9.0 =< Dictionary
+            Dictionary<int, string?> keyValuePairs = new Dictionary<int, string?>();
+
+
+            //1.1.- Agregar elementos key/value al diccionario, cada elemento en el diccionario es de tipo 'KeyValuePair<TKey, TValue>'(revisar el punto 1.5)
+            if (keyValuePairs.TryAdd(4, "Soy el cuarto")) Console.WriteLine("el cuarto fue añadido con exito!!");// forma segura sin necesidad de especificar try-catch
+            // * 1.1.1.-  Agregar de manera tradicional
+            try
+            {
+                keyValuePairs.Add(1, "Soy el primero");
+                keyValuePairs.Add(2, "Soy el segundo");
+                keyValuePairs.Add(3, "Soy el tercero");
+                keyValuePairs.Add(2, "Soy el tercero");// ya existe, me lanzara un ArgumentException
+            }
+            catch (ArgumentNullException a)
+            {
+                // si key es null
+                Console.WriteLine($"Excepcion si key es null: {a.Message}");
+            }
+            catch (ArgumentException e)
+            {
+                // si ya existe un elemento de la misma clave
+                Console.WriteLine("Excepcion si ya existe un elemento de la misma clave: {0}", e.Message);
+            }
+
+
+
+            //1.2.- Obtener un elemento del diccionario 
+            if (keyValuePairs.TryGetValue(4, out string? value)) Console.WriteLine("Valor encontrado para llave 4: " + (value ?? "valor null"));// Forma segura sin necesidad de especificar try-catch
+            // * 1.2.1.- Obtener un elemento con []
+            Console.WriteLine(keyValuePairs[2]);//se tiene que implementar una validacion previa de la existencia del key y/o controlar la excepcion con try...catch, EJ:
+            //  * * 1.2.1.1.- Obtener con una validacion previa, ahora el try-catch es para el metodo 'ConstainsKey'
+            try
+            {
+                if (keyValuePairs.ContainsKey(2)) Console.WriteLine(keyValuePairs[2]);
+            }catch(ArgumentNullException ae)
+            {
+                // si el argumento pasado al metodo 'ContainsKey' fue null
+                Console.WriteLine("Excepcion si el argumento pasado al metodo 'ContainsKey' fue null {0}", ae.Message);
+            }
+            //  * * 1.2.1.2.- Obtener con pero controlandolo con try-catch
+            try
+            {
+                Console.WriteLine(keyValuePairs[2]);
+            }
+            catch(KeyNotFoundException ke)
+            {
+                // si el valor de la key requeria no esta en el Dictionary
+                Console.WriteLine($"Excepcion si el valor de la key requeria no esta en el Dictionary: {ke.Message}"); 
+            }
+
+
+            //1.3.- Obtener solo keys de un diccionario 
+            Dictionary<int,string?>.KeyCollection keyCollection = keyValuePairs.Keys;
+            foreach (var key in keyCollection)
+            {
+                Console.WriteLine(key.ToString());
+            }
+
+            //1.4.- Obtener solo valores de un diccionario
+            Dictionary<int, string?>.ValueCollection valueCollection = keyValuePairs.Values;
+            foreach(string? valueDictionary in valueCollection) {
+                Console.WriteLine($"{valueDictionary}");        
+            }
+
+            //1.5.- Recorrer el Diccionario completo 
+            foreach (KeyValuePair<int, string?> pair in keyValuePairs)
+            {
+                Console.WriteLine($"TKey : {pair.Key}  -  TValue : {pair.Value}");
+            }
+
+            //1.6.- Remover 
+            try
+            {
+                if (keyValuePairs.Remove(1)) Console.WriteLine($"key removida : {1}");
+            }
+            catch (ArgumentNullException ae) {
+                Console.WriteLine("Excepcion si el argumento pasado al metodo 'Remove' fue null {0}", ae.Message);
+            }
+            // * 1.6.1.- Remover pero con output del valor removido
+            if(keyValuePairs.Remove(3, out string? removedValue)) Console.WriteLine($"key removida : {3}  -  Valor removido : {removedValue}");
+
+            Console.WriteLine("Diccionario con valores removidos:");
+            foreach (KeyValuePair<int, string?> pair in keyValuePairs)
+            {
+                Console.WriteLine($"TKey : {pair.Key}  -  TValue : {pair.Value}");
+            }
+
+            //1.7.- Limpiar Diccionario 
+            keyValuePairs.Clear();
+
+
+            //***************************************************************************************************************************************************************************************************************************
+            //********************************************************************************** END - DICTIONARY<TKey, TValue> *********************************************************************************************************
+            //***************************************************************************************************************************************************************************************************************************
+
+            //***************************************************************************************************************************************************************************************************************************
+            //************************************************************************************************* List<T> *****************************************************************************************************************
+            //***************************************************************************************************************************************************************************************************************************
+
+            //***************************************************************************************************************************************************************************************************************************
+            //********************************************************************************************* END - List<T> ***************************************************************************************************************
+            //***************************************************************************************************************************************************************************************************************************
+
+
+            //***************************************************************************************************************************************************************************************************************************
+            //************************************************************************************************* List<T> *****************************************************************************************************************
+            //***************************************************************************************************************************************************************************************************************************
+
+            //***************************************************************************************************************************************************************************************************************************
+            //********************************************************************************************* END - List<T> ***************************************************************************************************************
+            //***************************************************************************************************************************************************************************************************************************
+
+
+            //***************************************************************************************************************************************************************************************************************************
+            //************************************************************************************************* Stack<T> ****************************************************************************************************************
+            //***************************************************************************************************************************************************************************************************************************
+
+            //***************************************************************************************************************************************************************************************************************************
+            //********************************************************************************************* END - Stack<T> **************************************************************************************************************
+            //***************************************************************************************************************************************************************************************************************************
         }
+
 
         class Base
         {
-            public int Propiedad {get; set;}
+
+            public int Propiedad { get; set; }
 
             public Base() { }
-            public Base(int propiedad) => Propiedad = propiedad; 
+            public Base(int propiedad) => Propiedad = propiedad;
 
-            public void Metogo()
+            public override string ToString()
             {
-               
+                return "{ \"propiedad\" : " + Propiedad + "  }";
             }
         }
 
@@ -189,35 +322,38 @@ namespace Seccion8ColeccionesGenericas
         }
 
 
-        class GuardaObjetosGenerico<T> where T :  class, new() //struct para tipos primitivos // class para tipo de referencia //  new()  para que se pueda instanciar
+        //CLASE GENERICA 
+
+        //                               (primary constructor), disponible desde C# 12
+        class GuardaObjetosGenerico<T>(int numeroElementos) where T : class, new() //struct para tipos primitivos // class para tipo de referencia //  new()  para que se pueda instanciar
         {
             #region campos 
 
-            private int i = 0;
-            private T[] matrizElementos ;
+            private int _i = 0;
+            private readonly T[] _matrizElementos = new T[numeroElementos];
 
             #endregion
 
 
-            #region constructor
-            public GuardaObjetosGenerico(int numeroElementos)
-            {
-                matrizElementos = new T[numeroElementos];   
-            }
+            #region constructores 
+            //public GuardaObjetosGenerico(int numeroElementos)
+            //{
+            //    _matrizElementos = new T[numeroElementos];   
+            //}
             #endregion
 
             #region metodos
 
             public void GuardarElementos(T TValue)
             {
-                matrizElementos[i] = TValue;
-                i++;
+                _matrizElementos[_i] = TValue;
+                _i++;
             }
 
             public T ObtenerElemento(int index)
             {
-                if (index > matrizElementos.Length) new T();
-                return matrizElementos[index];
+                if (index > _matrizElementos.Length) new T();
+                return _matrizElementos[index];
             }
 
             #endregion

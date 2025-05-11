@@ -1,0 +1,50 @@
+﻿using System;
+using System.Text;
+
+class Program
+{
+
+    public static void Main()
+    {
+
+        byte[] bufferWithData  = Encoding.UTF8.GetBytes("Hola Mundo");// buffer con un tamaño definido 
+
+        using (MemoryStream mst = new MemoryStream())
+        {
+            Console.WriteLine("MemoryStream Antes:");  
+            Console.WriteLine($"Length   :  {mst.Length}");
+            Console.WriteLine($"Position :  {mst.Position}");
+            Console.WriteLine($"Capacity :  {mst.Capacity}");
+
+            mst.Write(bufferWithData, 0, bufferWithData.Length);
+
+            Console.WriteLine("MemoryStream Despues:");
+            Console.WriteLine($"Length   :  {mst.Length}");
+            Console.WriteLine($"Position :  {mst.Position}");
+            Console.WriteLine($"Capacity :  {mst.Capacity}");
+        }
+
+
+
+        byte[] buffer = new byte[1024]; //es un buffer que representa un espacio en memoria de 1024 KB
+        byte[] bufferData = Encoding.UTF8.GetBytes("Datos que seran escritos a buffer");
+        using (MemoryStream mst = new MemoryStream(bufferData))
+        {
+            Console.WriteLine("MemoryStream Antes:");
+            Console.WriteLine($"Length   :  {mst.Length}");
+            Console.WriteLine($"Position :  {mst.Position}");
+            Console.WriteLine($"Capacity :  {mst.Capacity}");
+
+            mst.Read(buffer, 0, bufferData.Length);   
+
+            Console.WriteLine("MemoryStream Despues:");
+            Console.WriteLine($"Length   :  {mst.Length}");
+            Console.WriteLine($"Position :  {mst.Position}");
+            Console.WriteLine($"Capacity :  {mst.Capacity}");
+        }
+        string result = Encoding.UTF8.GetString(buffer);
+        Console.WriteLine(result);
+
+    }
+
+}
