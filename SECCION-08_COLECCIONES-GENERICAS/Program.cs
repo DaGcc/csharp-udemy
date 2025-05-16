@@ -282,6 +282,7 @@ namespace Seccion8ColeccionesGenericas
         }
 
 
+
         class Base
         {
 

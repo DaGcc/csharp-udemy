@@ -1,0 +1,11 @@
+ESTUDIAR : 
+
+- CONSULTAS JPQL
+	- tipos de retorno si lo mapea automaticamente o no usando el @Query? ya sea (nativequery=true o sin este)
+	- projections y DTOs (DATO: en las projections y DTOs no se puede anidar automaticamente, tenemos que consultar para agregar a la lista)
+	- Usar EntityManager
+	- Ver si se puede recibir dos tablas que retorna el SP nativo de SQL con uso de SPRING BOOT JPA en la capa repo
+	- Ver si se puede recibir en formato json string del sql y deserealizarlo a un objeto java(projections, DTOs y clases)
+
+- REPOSITORIOS CON IMPLEMENTACIONES PERSONALIZADAS USANDO @Repository
+	
