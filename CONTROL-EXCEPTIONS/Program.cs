@@ -2,6 +2,7 @@
 
 
 using System;
+using CONTROL_EXCEPTIONS.EXCEPTION_RESPONSE;
 using OWN_CONTROL_EXCEPTIONS.EXCEPTION_RESPONSE;
 
 /**
@@ -78,6 +79,26 @@ namespace ControlExceptions
             catch (Exception e)
             {
                 Console.WriteLine(e.Message + " - Bloque Exception");
+            }
+
+
+
+            try
+            {
+                CustomExceptionSon customExceptionSon = new CustomExceptionSon();
+                customExceptionSon.ExceptionB();
+            }
+            catch (SonCustomException sce)
+            {
+               
+            }
+            catch (CustomOwnerException sce)
+            {
+
+            }
+            catch (Exception e)
+            {
+
             }
         }
 
@@ -158,6 +179,20 @@ namespace ControlExceptions
             throw new Exception("Normal Exception");
         }
 
+    }
+
+
+    public class CustomExceptionSon()
+    {
+
+        public void ExceptionA()
+        {
+            throw new SonCustomException("Hijo de CustomException");
+        }
+        public void ExceptionB()
+        {
+            ExceptionA();
+        }
     }
 
     /**

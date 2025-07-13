@@ -19,11 +19,12 @@ namespace Seccion7Clase
             Console.WriteLine("TOMORROW: {0}",dia.Tomorrow);
             Console.WriteLine("YESTERDAY: {0}",dia.Yesterday);
 
+
+            ClaseGenerica<string> claseGenerica = new ClaseGenerica<string>();
+            
+            claseGenerica.ImprimeTipo();
+
         }
-
-        DateOnly Date;
-
-      
 
     }
 
@@ -130,9 +131,11 @@ namespace Seccion7Clase
     }
  
 
-
     public class ClaseGenerica<T>
     {
-
+        public void ImprimeTipo()
+        {
+            Console.WriteLine(typeof(T).Name);    
+        }
     }
 }
